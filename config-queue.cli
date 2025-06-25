@@ -1,0 +1,37 @@
+embed-server --std-out=echo --server-config=standalone-openshift.xml
+
+/subsystem=messaging-activemq/server=default/connection-factory=InVmConnectionFactory:remove
+/subsystem=messaging-activemq/server=default/connection-factory=RemoteConnectionFactory:remove
+/subsystem=messaging-activemq/server=default/pooled-connection-factory=activemq-ra:remove
+
+/subsystem=messaging-activemq/server=default/jms-queue="queue/IndexerQueue":add(entries=["java:/queue/IndexerQueue"])
+/subsystem=messaging-activemq/server=default/jms-queue=EventsQueue:add(entries=["java:/queue/EventsQueue"])
+/subsystem=messaging-activemq/server=default/jms-queue=LogEventsQueue:add(entries=["java:/queue/LogEventsQueue"])
+
+/subsystem=messaging-activemq/server=default/remote-connector=activemq-remote-connector0:add(socket-binding="activemq-remote0")
+/subsystem=messaging-activemq/server=default/remote-connector=activemq-remote-connector1:add(socket-binding="activemq-remote1")
+/subsystem=messaging-activemq/server=default/connection-factory=InVmConnectionFactory:add(entries=["java:/ConnectionFactory"],connectors=["activemq-remote-connector0", "activemq-remote-connector1"])
+
+/subsystem=messaging-activemq/server=default/connection-factory=RemoteConnectionFactory:add(entries=["java:jboss/exported/jms/RemoteConnectionFactory"],connectors=["activemq-remote-connector0", "activemq-remote-connector1"], user="admin")
+/subsystem=messaging-activemq/server=default/pooled-connection-factory=activemq:add(entries=["java:/JmsXA","java:jboss/DefaultJMSConnectionFactory"],transaction="xa",connectors=["activemq-remote-connector0", "activemq-remote-connector1"], user="admin", password="admin")
+
+/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=activemq-remote0:add(host="broker0",port=61616)
+/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=activemq-remote1:add(host="broker1",port=61616)
+
+quit
+
+#### https://docs.redhat.com/en/documentation/red_hat_jboss_enterprise_application_platform/7.4/html/configuring_messaging/resource_adapters#using_jboss_amq_for_remote_jakarta_messaging_communication
+
+# /socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=activemq-remote0:add(host="broker0",port=61616)
+# /socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=activemq-remote1:add(host="broker1",port=61616)
+
+# /subsystem=messaging-activemq/remote-connector=activemq-remote0:add(socket-binding=activemq-remote0)
+# /subsystem=messaging-activemq/remote-connector=activemq-remote1:add(socket-binding=activemq-remote1)
+
+# /subsystem=messaging-activemq/pooled-connection-factory=activemq:add(transaction=xa,entries=[java:jboss/exported/jms/RemoteConnectionFactory],connectors=[activemq-remote0, activemq-remote1])
+
+# /subsystem=naming/binding=java\:global\/remoteContext:add(binding-type=external-context, class=javax.naming.InitialContext, module=org.apache.activemq.artemis, environment=[java.naming.factory.initial=org.apache.activemq.artemis.jndi.ActiveMQInitialContextFactory, java.naming.provider.url="tcp://broker0:61616,tcp://broker1:61616?ha=true&reconnectAttempts=-1", queue.IndexerQueue=IndexerQueue, queue.EventsQueue=EventsQueue, queue.LogEventsQueue=LogEventsQueue])
+
+# /subsystem=naming/binding=java\:\/queue\/IndexerQueue:add(lookup=java:global/remoteContext/IndexerQueue,binding-type=lookup)
+# /subsystem=naming/binding=java\:\/queue\/EventsQueue:add(lookup=java:global/remoteContext/EventsQueue,binding-type=lookup)
+# /subsystem=naming/binding=java\:\/queue\/LogEventsQueue:add(lookup=java:global/remoteContext/LogEventsQueue,binding-type=lookup)

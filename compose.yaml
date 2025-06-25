@@ -1,0 +1,84 @@
+services:
+  broker0:
+    image: registry.redhat.io/amq7/amq-broker-rhel9:7.13
+    hostname: broker0
+    environment:
+      TZ: America/Cuiaba
+      AMQ_USER: admin
+      AMQ_PASSWORD: admin
+      AMQ_CLUSTERED: true
+      AMQ_CLUSTER_USER: admin
+      AMQ_CLUSTER_PASSWORD: admin
+      AMQ_DATA_DIR: /opt/data
+      JAVA_ARGS_APPEND: -Duser.language=pt -Duser.country=BR -Dlogger.level=DEBUG
+      AMQ_ENABLE_METRICS_PLUGIN: true
+      # AMQ_REQUIRE_LOGIN: true
+    ports:
+      - "8161:8161"
+    volumes:
+      - ./broker0_data:/opt/data
+      - ./broker_ping_data:/opt/jgroups-ping
+      - ./jgroups-ping.xml:/opt/amq/conf/jgroups-ping.xml
+
+  broker1:
+    image: registry.redhat.io/amq7/amq-broker-rhel9:7.13
+    hostname: broker1
+    environment:
+      TZ: America/Cuiaba
+      AMQ_USER: admin
+      AMQ_PASSWORD: admin
+      AMQ_CLUSTERED: true
+      AMQ_CLUSTER_USER: admin
+      AMQ_CLUSTER_PASSWORD: admin
+      AMQ_DATA_DIR: /opt/data
+      JAVA_ARGS_APPEND: -Duser.language=pt -Duser.country=BR -Dlogger.level=DEBUG
+      AMQ_ENABLE_METRICS_PLUGIN: true
+      # AMQ_REQUIRE_LOGIN: true
+    ports:
+      - "8171:8161"
+    volumes:
+      - ./broker1_data:/opt/data
+      - ./broker_ping_data:/opt/jgroups-ping
+      - ./jgroups-ping.xml:/opt/amq/conf/jgroups-ping.xml
+
+  producer:
+    image: eap/jms-example
+    hostname: producer
+    build: .
+    environment:
+      TZ: America/Cuiaba
+      ADMIN_USERNAME: admin
+      ADMIN_PASSWORD: admin
+    volumes:
+      - ./jboss-jms-producer/target/jboss-jms-producer.war:/deployments/jboss-jms-producer.war
+      - ./config-queue.cli:/opt/eap/extensions/config-queue.cli
+    ports:
+      - "8080:8080"
+
+  consumer0:
+    image: eap/jms-example
+    hostname: consumer0
+    build: .
+    environment:
+      TZ: America/Cuiaba
+      ADMIN_USERNAME: admin
+      ADMIN_PASSWORD: admin
+    volumes:
+      - ./jboss-jms-consumer/target/jboss-jms-consumer.war:/deployments/jboss-jms-consumer.war
+      - ./config-queue.cli:/opt/eap/extensions/config-queue.cli
+    ports:
+      - "8081:8080"
+
+  consumer1:
+    image: eap/jms-example
+    hostname: consumer1
+    build: .
+    environment:
+      TZ: America/Cuiaba
+      ADMIN_USERNAME: admin
+      ADMIN_PASSWORD: admin
+    volumes:
+      - ./jboss-jms-consumer/target/jboss-jms-consumer.war:/deployments/jboss-jms-consumer.war
+      - ./config-queue.cli:/opt/eap/extensions/config-queue.cli
+    ports:
+      - "8082:8080"
