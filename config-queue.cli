@@ -12,11 +12,11 @@ embed-server --std-out=echo --server-config=standalone-openshift.xml
 /subsystem=messaging-activemq/server=default/remote-connector=activemq-remote-connector1:add(socket-binding="activemq-remote1")
 /subsystem=messaging-activemq/server=default/connection-factory=InVmConnectionFactory:add(entries=["java:/ConnectionFactory"],connectors=["activemq-remote-connector0", "activemq-remote-connector1"])
 
-/subsystem=messaging-activemq/server=default/connection-factory=RemoteConnectionFactory:add(entries=["java:jboss/exported/jms/RemoteConnectionFactory"],connectors=["activemq-remote-connector0", "activemq-remote-connector1"], user="admin")
-/subsystem=messaging-activemq/server=default/pooled-connection-factory=activemq:add(entries=["java:/JmsXA","java:jboss/DefaultJMSConnectionFactory"],transaction="xa",connectors=["activemq-remote-connector0", "activemq-remote-connector1"], user="admin", password="admin")
+/subsystem=messaging-activemq/server=default/connection-factory=RemoteConnectionFactory:add(entries=["java:jboss/exported/jms/RemoteConnectionFactory"],connectors=["activemq-remote-connector0", "activemq-remote-connector1"])
+/subsystem=messaging-activemq/server=default/pooled-connection-factory=activemq:add(entries=["java:/JmsXA","java:jboss/DefaultJMSConnectionFactory"],transaction="xa",connectors=["activemq-remote-connector0", "activemq-remote-connector1"])
 
-/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=activemq-remote0:add(host="broker0",port=61616)
-/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=activemq-remote1:add(host="broker1",port=61616)
+/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=activemq-remote0:add(host="${env.AMQ_BROKER_HOST0:host0}",port=61616)
+/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=activemq-remote1:add(host="${env.AMQ_BROKER_HOST1:host1}",port=61616)
 
 quit
 

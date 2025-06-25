@@ -49,6 +49,8 @@ services:
       TZ: America/Cuiaba
       ADMIN_USERNAME: admin
       ADMIN_PASSWORD: admin
+      AMQ_BROKER_HOST0: broker0
+      AMQ_BROKER_HOST1: broker1
     volumes:
       - ./jboss-jms-producer/target/jboss-jms-producer.war:/deployments/jboss-jms-producer.war
       - ./config-queue.cli:/opt/eap/extensions/config-queue.cli
@@ -63,6 +65,8 @@ services:
       TZ: America/Cuiaba
       ADMIN_USERNAME: admin
       ADMIN_PASSWORD: admin
+      AMQ_BROKER_HOST0: broker0
+      AMQ_BROKER_HOST1: broker1
     volumes:
       - ./jboss-jms-consumer/target/jboss-jms-consumer.war:/deployments/jboss-jms-consumer.war
       - ./config-queue.cli:/opt/eap/extensions/config-queue.cli
@@ -77,6 +81,8 @@ services:
       TZ: America/Cuiaba
       ADMIN_USERNAME: admin
       ADMIN_PASSWORD: admin
+      AMQ_BROKER_HOST0: broker0
+      AMQ_BROKER_HOST1: broker1
     volumes:
       - ./jboss-jms-consumer/target/jboss-jms-consumer.war:/deployments/jboss-jms-consumer.war
       - ./config-queue.cli:/opt/eap/extensions/config-queue.cli
