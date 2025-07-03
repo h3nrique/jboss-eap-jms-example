@@ -18,20 +18,10 @@ embed-server --std-out=echo --server-config=standalone-openshift.xml
 /socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=activemq-remote0:add(host="${env.AMQ_BROKER_HOST0:host0}",port=61616)
 /socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=activemq-remote1:add(host="${env.AMQ_BROKER_HOST1:host1}",port=61616)
 
+
+## JSF 2.1 only for JBoss Seam test (jboss-seam-jms-consumer) - https://github.com/wildfly/wildfly/tree/main/jsf/multi-jsf-installer/src/main/resources
+# module add --name=javax.faces.api --slot=mojarra-2.1 --resources=/tmp/javax.faces-2.1.29-11.jar --module-xml=mojarra-api-module.xml
+# module add --name=com.sun.jsf-impl --slot=mojarra-2.1 --resources=/tmp/jsf-impl-2.1.29-11.jar --module-xml=jsf-impl-module.xml
+# module add --name=org.jboss.as.jsf-injection --slot=mojarra-2.1 --resources=weld-jsf-${version.org.jboss.weld.weld}.jar:wildfly-jsf-injection-${project.version}.jar --resource-delimiter=: --module-xml=mojarra-injection-module.xml
+
 quit
-
-#### https://docs.redhat.com/en/documentation/red_hat_jboss_enterprise_application_platform/7.4/html/configuring_messaging/resource_adapters#using_jboss_amq_for_remote_jakarta_messaging_communication
-
-# /socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=activemq-remote0:add(host="broker0",port=61616)
-# /socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=activemq-remote1:add(host="broker1",port=61616)
-
-# /subsystem=messaging-activemq/remote-connector=activemq-remote0:add(socket-binding=activemq-remote0)
-# /subsystem=messaging-activemq/remote-connector=activemq-remote1:add(socket-binding=activemq-remote1)
-
-# /subsystem=messaging-activemq/pooled-connection-factory=activemq:add(transaction=xa,entries=[java:jboss/exported/jms/RemoteConnectionFactory],connectors=[activemq-remote0, activemq-remote1])
-
-# /subsystem=naming/binding=java\:global\/remoteContext:add(binding-type=external-context, class=javax.naming.InitialContext, module=org.apache.activemq.artemis, environment=[java.naming.factory.initial=org.apache.activemq.artemis.jndi.ActiveMQInitialContextFactory, java.naming.provider.url="tcp://broker0:61616,tcp://broker1:61616?ha=true&reconnectAttempts=-1", queue.IndexerQueue=IndexerQueue, queue.EventsQueue=EventsQueue, queue.LogEventsQueue=LogEventsQueue])
-
-# /subsystem=naming/binding=java\:\/queue\/IndexerQueue:add(lookup=java:global/remoteContext/IndexerQueue,binding-type=lookup)
-# /subsystem=naming/binding=java\:\/queue\/EventsQueue:add(lookup=java:global/remoteContext/EventsQueue,binding-type=lookup)
-# /subsystem=naming/binding=java\:\/queue\/LogEventsQueue:add(lookup=java:global/remoteContext/LogEventsQueue,binding-type=lookup)

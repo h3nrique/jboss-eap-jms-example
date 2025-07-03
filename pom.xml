@@ -16,5 +16,6 @@
     <modules>
         <module>jboss-jms-consumer</module>
         <module>jboss-jms-producer</module>
+        <module>jboss-seam-jms-consumer</module>
     </modules>
 </project>

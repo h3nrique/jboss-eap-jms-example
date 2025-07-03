@@ -1,1 +1,8 @@
-GET http://localhost:8080/jboss-jms-producer/send?message=MyCustomMessage
+### Send a message to queue EventsQueue
+GET http://localhost:8080/jboss-jms-producer/send
+
+### Send message that will cause error
+GET http://localhost:8080/jboss-jms-producer/send?message=DLQ
+
+### Send message to queue LogEventsQueue
+GET http://localhost:8080/jboss-jms-producer/send?message=LOG

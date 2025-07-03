@@ -10,6 +10,8 @@
     <p>The Message-Driven Bean (MDB) will automatically consume it.</p>
     <p><a href="send">Send a JMS Message</a></p>
     <p>You can also send a custom message: <a href="send?message=MyCustomMessage">Send "MyCustomMessage"</a></p>
+    <p>You can also send a DLQ message: <a href="send?message=DLQ">Send "DLQ"</a></p>
+    <p>You can also send a LOG message: <a href="send?message=LOG">Send "LOG"</a></p>
     <p>Check the JBoss EAP server logs to see the MDB consuming messages.</p>
 </body>
 </html>

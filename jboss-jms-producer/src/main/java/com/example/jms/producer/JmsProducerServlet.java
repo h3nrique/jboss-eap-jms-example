@@ -19,7 +19,10 @@ public class JmsProducerServlet extends HttpServlet {
     private ConnectionFactory connectionFactory;
 
     @Resource(lookup = "java:/queue/EventsQueue")
-    private Queue myQueue;
+    private Queue eventQueue;
+
+    @Resource(lookup = "java:/queue/LogEventsQueue")
+    private Queue logEventQueue;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -32,14 +35,18 @@ public class JmsProducerServlet extends HttpServlet {
         }
 
         try (JMSContext context = connectionFactory.createContext()) {
-            context.createProducer().send(myQueue, message);
+            if(message.contains("LOG")) {
+                context.createProducer().send(logEventQueue, message);
+            } else {
+                context.createProducer().send(eventQueue, message);
+            }
             out.println("<h1>Message Sent!</h1>");
             out.println("<p>Message: <strong>" + message + "</strong></p>");
             out.println("<p>Check your server logs for the MDB consumer output.</p>");
-        } catch (Exception e) {
+        } catch (Exception err) {
             out.println("<h1>Error sending message:</h1>");
-            out.println("<p>" + e.getMessage() + "</p>");
-            e.printStackTrace(out);
+            out.println("<p>" + err.getMessage() + "</p>");
+            err.printStackTrace(out);
         } finally {
             out.close();
         }
