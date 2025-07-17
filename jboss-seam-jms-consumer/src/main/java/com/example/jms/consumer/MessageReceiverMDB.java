@@ -40,6 +40,8 @@ public class MessageReceiverMDB implements MessageListener {
             throw new javax.ejb.EJBException(err);
         }
 
+        // https://developer.jboss.org/thread/185226
+        // https://jira.jboss.org/jira/browse/JBSEAM-3778
         try {
             Events.instance().raiseEvent("example", msg.getText());
             LOGGER.info("Seam Event raised");
