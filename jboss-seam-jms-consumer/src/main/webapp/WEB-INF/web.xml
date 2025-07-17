@@ -6,9 +6,9 @@
     <display-name>JBoss Seam JMS Consumer</display-name>
 
     <context-param>
-        <param-name>org.jboss.jbossfaces.JSF_CONFIG_NAME</param-name>
-        <param-value>mojarra-2.1</param-value>
-     </context-param>
+        <param-name>org.jboss.jbossfaces.WAR_BUNDLES_JSF_IMPL</param-name>
+        <param-value>true</param-value>
+    </context-param>
 
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
