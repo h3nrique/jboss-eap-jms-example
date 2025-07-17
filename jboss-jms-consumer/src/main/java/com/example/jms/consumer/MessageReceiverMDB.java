@@ -27,7 +27,7 @@ public class MessageReceiverMDB implements MessageListener {
             if (rcvMessage instanceof TextMessage) {
                 msg = (TextMessage) rcvMessage;
                 if(msg.getText().contains("DLQ")) {
-                    throw new JMSException("Example DLQ message.");
+                    throw new JMSException("Example exception for DLQ message.");
                 }
                 LOGGER.info("RECEIVED MESSAGE from queue: " + msg.getText());
             } else {

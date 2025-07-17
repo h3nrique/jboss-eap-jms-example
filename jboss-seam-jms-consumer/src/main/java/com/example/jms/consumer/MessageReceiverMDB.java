@@ -42,14 +42,16 @@ public class MessageReceiverMDB implements MessageListener {
 
         try {
             Events.instance().raiseEvent("example", msg.getText());
+            LOGGER.info("Seam Event raised");
         } catch (Exception err) {
-            LOGGER.severe("Error send seam event: " + err.getMessage());
+            LOGGER.severe("Error send Seam Event :: " + err.getMessage());
         }
 
         try {
             exampleListener.example("example param");
+            LOGGER.info("Seam Bean called");
         } catch (Exception err) {
-            LOGGER.severe("Error call seam bean: " + err.getMessage());
+            LOGGER.severe("Error call Seam Bean :: " + err.getMessage());
         }
     }
 }

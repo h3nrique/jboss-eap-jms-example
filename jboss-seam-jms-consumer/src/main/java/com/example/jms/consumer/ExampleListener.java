@@ -10,11 +10,11 @@ public class ExampleListener {
 
     @Observer("example")
     public void observerExample(String message) {
-        LOGGER.info("RECEIVED EVENT seam: " + message);
+        LOGGER.info("RECEIVED EVENT Seam: " + message);
     }
 
     public void example(String message) {
-        LOGGER.info("RECEIVED seam: " + message);
+        LOGGER.info("RECEIVED Seam: " + message);
     }
 
     public void test() {
